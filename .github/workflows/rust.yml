@@ -1,0 +1,40 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_and_test:
+    name: Build & Test Library
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        rust: [ stable, beta, nightly ]
+    steps:
+      - name: Check out Source
+        uses: actions/checkout@v2
+      - name: Setup Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+      - name: Build Library
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Test Library
+        uses: actions-rs/cargo@v1
+        env:
+          CI: 'True'
+          RUSTFLAGS: '-D warnings'
+        with:
+          command: test
+          args: --release

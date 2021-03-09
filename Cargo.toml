@@ -1,0 +1,12 @@
+[package]
+name = "voxfile"
+edition = "2018"
+version = "0.1.0"
+authors = ["Hans W. Uhlig <huhlig@gmail.com>"]
+description = "A Magica Voxel File Handler"
+
+[dependencies]
+byteorder = "1"
+nom = "6"
+tracing = "0.1"
+env_logger = "0.8"

@@ -1,0 +1,28 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    name: Publish Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Source
+        uses: actions/checkout@v2
+      - name: Build Documentation
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --verbose
+      - name: Patch Docs
+        run: |
+          echo '<meta http-equiv="refresh" content="0; url=vox_tools/index.html" /> ' > target/doc/index.html
+      - name: Publish Rust Docs to GitHub Pages
+        uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
+        with:
+          dir: target/doc
+          branch: gh-pages
+          token: ${{ secrets.ACCESS_TOKEN }}
